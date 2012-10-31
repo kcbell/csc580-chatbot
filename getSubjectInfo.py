@@ -22,7 +22,7 @@ def getSubjectInfo(subject):
     url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&titles=" + subjURL
     html = urlopen(url).read()
     raw = nltk.clean_html(html)
-    start = raw.find("'''" + subject.split(' ')[0])
+    start = raw.lower().find(("'''" + subject.split(' ')[0]).lower())
     raw = raw[start:]
     raw = re.sub("'''([a-zA-Z0-9 \.]+)'''", '\g<1>', raw)
     raw = re.sub('\{\{(.+?)\}\}', '', raw)
