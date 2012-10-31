@@ -39,7 +39,7 @@ def getSubjectInfo(subject):
 		endPunctuationCount += 1
 	index += 1
     raw = raw[:index]
-    return raw
+    return raw.capitalize()
 
 def main():
     msg = raw_input()
