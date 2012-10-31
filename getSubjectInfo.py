@@ -18,11 +18,12 @@ def checkForUppercaseLetter(s):
 
 def getSubjectInfo(subject): 
     subjURL = subject.replace(" ", "_") 
-    url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&redirects=yes&titles=" + subjURL
+    url = "http://en.wikipedia.org/w/api.php?format=xml&prop=extracts&explaintext=true&exintro=true&action=query&redirects=yes&titles=" + subjURL
     html = urlopen(url).read()
     raw = nltk.clean_html(html)
-    start = raw.lower().find(("'''" + subject.split(' ')[0]).lower())
-    raw = raw[start:]
+    #start = raw.lower().find((subject.split(' ')[0]).lower())
+    #raw = raw[start:]
+    raw = raw.replace("[Listen]", "").replace("[play]","")
     raw = re.sub("'''([a-zA-Z0-9 \.]+)'''", '\g<1>', raw)
     raw = re.sub('\{\{(.+?)\}\}', '', raw)
     raw = re.sub('ref(.+?)/ref', '', raw)
@@ -30,15 +31,22 @@ def getSubjectInfo(subject):
     raw = re.sub(r'\[\[([#a-zA-Z0-9 \.\(\)]+)\|([#a-zA-Z0-9 \.\(\)]+)\]\] \[\[([#a-zA-Z0-9 \.\(\)]+)\]\]', '\g<2> \g<3>', raw)
     raw = re.sub(r'\[\[([#a-zA-Z0-9 \.\(\)]+)\|([#a-zA-Z0-9 \.\(\)]+)\]\]', '\g<2>', raw)
     raw = re.sub(r'\[\[([#a-zA-Z0-9 \.\(\)]+)\]\]', '\g<1>', raw)
+    raw = re.sub(r'\(.*;\s?', '(', raw)
+    raw = re.sub(r'\(.*/.+/\)\s?', "", raw)
+    print raw
     raw = raw.replace('\n', ' ')
     endPunctuationCount = 0
     index = 0
-    while index < len(raw) and endPunctuationCount < 2:
-        if raw[index] in ['.', '?', '!'] and (raw[index - 1].islower() or not raw[index - 1].isalpha()) and checkForUppercaseLetter(raw[index + 1:]):
-            endPunctuationCount += 1
-        index += 1
-    raw = raw[:index]
-    return "I don't know about that." if len(raw) <= 1 else raw[0].upper() + raw[1:]
+    try:
+        while index < len(raw) and endPunctuationCount < 2:
+            if raw[index] in ['.', '?', '!'] and (raw[index - 1].islower() or not raw[index - 1].isalpha()) and checkForUppercaseLetter(raw[index + 1:]):
+                endPunctuationCount += 1
+            index += 1
+        raw = raw[:index]
+    except IndexError:
+        pass
+    ret = "I don't know about that." if len(raw) <= 1 else raw[0].upper() + raw[1:]
+    return "Which one?" if ret.endswith(" to:") else ret
 
 def main():
     msg = raw_input()
