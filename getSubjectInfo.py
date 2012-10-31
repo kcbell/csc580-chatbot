@@ -39,7 +39,7 @@ def getSubjectInfo(subject):
 		endPunctuationCount += 1
 	index += 1
     raw = raw[:index]
-    return raw.capitalize()
+    return "I don't know about that." if len(raw) <= 1 else raw.capitalize()
 
 def main():
     msg = raw_input()
