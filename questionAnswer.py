@@ -11,10 +11,10 @@ from getSubjectInfo import getSubjectInfo
 
 # some pre-defined forms of subject queries
 subjectQueries = [
-                  '.*about\s+(.+)',
-                  '.*what\s+(?:is|was)\s+(.+)',
-                  '.*who\s+(?:is|was)\s+(.+)',
-                  '.*subject\s+of\s+(.+)',
+                  '.*about\s+(?:a\s+|the\s+)?(.+)',
+                  '.*what\s+(?:is|was)\s+(?:a\s+|the\s+)?(.+)',
+                  '.*who\s+(?:is|was)\s+(?:a\s+|the\s+)?(.+)',
+                  '.*subject\s+of\s+(?:a\s+|the\s+)?(.+)',
                   ]
 
 # some pre-defined forms of birthday queries
@@ -25,9 +25,13 @@ birthQueries = [
                 ".*(?:is|was)\s+(.+)'s\s+birthda(?:y|te).",
                 ]
 
+birthWords = ['birthday', 'birthdate', 'birth', 'born']
+
 def cleanSubject(subject):
     s = subject.strip()
+    s = s.replace("'s",'')
     s = re.sub('\s+', ' ', s)
+    s = string.capwords(s)
     for c in string.punctuation:
         s = s.replace(c, '')
     return s
@@ -37,13 +41,36 @@ def getResponse(msg):
         match = re.match(q, msg, re.IGNORECASE)
         if match != None:
             subject = cleanSubject(match.group(1))
+            print 'found birthday for ' + subject
             return getBirthday(subject)
     for q in subjectQueries:
         match = re.match(q, msg, re.IGNORECASE)
         if match != None:
             subject = cleanSubject(match.group(1))
+            print 'found subject ' + subject
             return getSubjectInfo(subject)
-    return "I don't know what you're talking about."
+    # Okay, REs didn't work... try something else
+    birth = False
+    words = msg.split()
+    cleanWords = []
+    for word in words:
+        s = word
+        for c in string.punctuation:
+            s = s.replace(c, '')
+        if s in birthWords:
+            birth = True
+        else:
+            cleanWords.append(word)
+    # start from end, grab all cap words to get subject
+    subj = []
+    for word in cleanWords.reverse():
+        if (word[0] in string.ascii_uppercase):
+            subj.append(word)
+    if (len(subj) == 0):
+        return "I don't know what you're talking about."
+    else:
+        subject = cleanSubject(' '.join(subj.reverse()))
+        return getBirthday(subject) if birth else getSubjectInfo(subject)
     
 def main():
     msg = raw_input()
