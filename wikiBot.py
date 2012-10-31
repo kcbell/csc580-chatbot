@@ -33,7 +33,7 @@ class TestBot(SingleServerIRCBot):
             self.do_command(e, a[1].strip())
         return
     
-#processes commands
+    #processes commands
     def do_command(self, e, cmd):
         nick = nm_to_n(e.source())
         c = self.connection
@@ -78,7 +78,7 @@ def main():
             sys.exit(1)
     else:
         port = 6667
-    channel = sys.argv[2]
+    channel = '#' + sys.argv[2]
     nickname = sys.argv[3]
 
     bot = TestBot(channel, nickname, server, port)
