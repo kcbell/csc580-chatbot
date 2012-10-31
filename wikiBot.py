@@ -41,7 +41,7 @@ class TestBot(SingleServerIRCBot):
         if cmd == "disconnect":
             self.disconnect()
         elif cmd == "die":
-        c.privmsg(self.channel,"I shall!!!")
+            c.privmsg(self.channel,"I shall!!!")
             self.die()
         elif cmd == "stats":
             for chname, chobj in self.channels.items():
@@ -57,10 +57,10 @@ class TestBot(SingleServerIRCBot):
                 voiced.sort()
                 c.notice(nick, "Voiced: " + ", ".join(voiced))
         else:
-        #none of the commands match, pass the text to the response function defined above
-        #but first sleep a little
-        time.sleep(3)
-        c.privmsg(self.channel,nick + ": " + responseFun(cmd))    
+            #none of the commands match, pass the text to the response function defined above
+            #but first sleep a little
+            time.sleep(1)
+            c.privmsg(self.channel,nick + ": " + responseFun(cmd))    
 
 def main():
     import sys
