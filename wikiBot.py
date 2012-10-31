@@ -23,6 +23,7 @@ class TestBot(SingleServerIRCBot):
 
     def on_welcome(self, c, e):
         c.join(self.channel)
+        print "Connected as %s." % self.connection.get_nickname()
 
     def on_privmsg(self, c, e):
         self.do_command(e, e.arguments()[0])
