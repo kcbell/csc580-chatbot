@@ -22,7 +22,7 @@ subjectQueries = [
 # some pre-defined forms of birthday queries
 birthQueries = [
                 '.*(?:is|was)\s+(.+)\s+born',
-                '.*(?:birth|birthdate|birthdate)\s+of\s+(.+)',
+                '.*(?:birth|birthdate|birthday)\s+of\s+(.+)',
                 '.*(?:date|day|when)\s+(.+)\s+(?:is|was)\s+born.',
                 ".*(?:is|was)\s+(.+)'s\s+birthda(?:y|te).",
                 ]
