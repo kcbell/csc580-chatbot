@@ -69,6 +69,8 @@ def getResponse(msg):
     for word in cleanWords:
         if (word[0] in string.ascii_uppercase):
             subj.append(word)
+        else:
+            break
     if (len(subj) == 0):
         return "I don't know what you're talking about."
     else:
