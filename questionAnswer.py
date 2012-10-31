@@ -64,8 +64,9 @@ def getResponse(msg):
     if (len(cleanWords) == 0):
         return "I don't know what you're talking about."
     # start from end, grab all cap words to get subject
+    cleanWords.reverse()
     subj = []
-    for word in cleanWords.reverse():
+    for word in cleanWords:
         if (word[0] in string.ascii_uppercase):
             subj.append(word)
     if (len(subj) == 0):
