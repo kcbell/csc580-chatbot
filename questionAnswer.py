@@ -9,6 +9,8 @@ import re, nltk, string
 from getBirthday import getBirthday
 from getSubjectInfo import getSubjectInfo
 
+punct = '!"#$%&*+,-./:;<=>?@[\]^_`{|}~' + "'"
+
 # some pre-defined forms of subject queries
 subjectQueries = [
                   '.*about\s+(?:a\s+|the\s+)?(.+)',
@@ -32,7 +34,7 @@ def cleanSubject(subject):
     s = s.replace("'s",'')
     s = re.sub('\s+', ' ', s)
     s = string.capwords(s)
-    for c in string.punctuation:
+    for c in punct:
         s = s.replace(c, '')
     return s
 
@@ -55,7 +57,7 @@ def getResponse(msg):
     cleanWords = []
     for word in words:
         s = word
-        for c in string.punctuation:
+        for c in punct:
             s = s.replace(c, '')
         if s in birthWords:
             birth = True
@@ -67,7 +69,7 @@ def getResponse(msg):
     cleanWords.reverse()
     subj = []
     for word in cleanWords:
-        if (word[0] in string.ascii_uppercase):
+        if (word[0] in string.ascii_uppercase or word[0] == '('):
             subj.append(word)
         else:
             break

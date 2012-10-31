@@ -8,17 +8,16 @@ import re, nltk
 
 from urllib import urlopen
 
-def checkForUppercaseLetter(str):
-	if str[0] != ' ':
-		return False
-
-	index = 0
-	while index < len(str) and str[index] == ' ':
-		index += 1
-	return str[index].isupper()
+def checkForUppercaseLetter(s):
+    if s[0] != ' ':
+        return False
+    index = 0
+    while index < len(s) and s[index] == ' ':
+        index += 1
+    return s[index].isupper()
 
 def getSubjectInfo(subject): 
-    subjURL = subject.replace(" ","_") 
+    subjURL = subject.replace(" ", "_") 
     url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&titles=" + subjURL
     html = urlopen(url).read()
     raw = nltk.clean_html(html)
@@ -35,11 +34,11 @@ def getSubjectInfo(subject):
     endPunctuationCount = 0
     index = 0
     while index < len(raw) and endPunctuationCount < 2:
-	if raw[index] in ['.', '?', '!'] and (raw[index-1].islower() or not raw[index-1].isalpha()) and checkForUppercaseLetter(raw[index+1:]):
-		endPunctuationCount += 1
-	index += 1
+        if raw[index] in ['.', '?', '!'] and (raw[index - 1].islower() or not raw[index - 1].isalpha()) and checkForUppercaseLetter(raw[index + 1:]):
+            endPunctuationCount += 1
+        index += 1
     raw = raw[:index]
-    return "I don't know about that." if len(raw) <= 1 else raw.capitalize()
+    return "I don't know about that." if len(raw) <= 1 else raw[0].upper() + raw[1:]
 
 def main():
     msg = raw_input()
