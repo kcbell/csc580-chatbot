@@ -39,12 +39,13 @@ def getSubjectInfo(subject):
 		endPunctuationCount += 1
 	index += 1
     raw = raw[:index]
-    print raw
+    return raw
 
-print '\n'
-getSubjectInfo("John Adams")
-print '\n'       
-getSubjectInfo("Basketball")
-print '\n'
-getSubjectInfo('Derrick Rose')
-print '\n'
+def main():
+    msg = raw_input()
+    resp = getSubjectInfo(msg)
+    print 'Response:'
+    print resp
+    
+if __name__ == "__main__":
+    main()

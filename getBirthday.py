@@ -24,7 +24,7 @@ def getBirthday(name): #name = <firstName><space><lastName> or <name>
             print m.group(1), m.group(2), m.group(3)
             year, month, day = m.group(1, 2, 3)
             print month, day, year
-            result = name + " was born on " + months[int(month)] + " " + day + "," + year + "."
+            result = name + " was born on " + months[int(month)] + " " + day + ", " + year + "."
         else:
             result = name + " was born in the past.."
     else:
@@ -32,8 +32,11 @@ def getBirthday(name): #name = <firstName><space><lastName> or <name>
 
     return result
         
-
-
-#print getBirthday("Michael Jackson")
-
-
+def main():
+    msg = raw_input()
+    resp = getBirthday(msg)
+    print 'Response:'
+    print resp
+    
+if __name__ == "__main__":
+    main()
