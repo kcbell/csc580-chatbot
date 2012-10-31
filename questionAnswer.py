@@ -72,7 +72,8 @@ def getResponse(msg):
     if (len(subj) == 0):
         return "I don't know what you're talking about."
     else:
-        subject = cleanSubject(' '.join(subj.reverse()))
+        subj.reverse()
+        subject = cleanSubject(' '.join(subj))
         return getBirthday(subject) if birth else getSubjectInfo(subject)
     
 def main():
