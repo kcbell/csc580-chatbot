@@ -18,7 +18,7 @@ def checkForUppercaseLetter(s):
 
 def getSubjectInfo(subject): 
     subjURL = subject.replace(" ", "_") 
-    url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&titles=" + subjURL
+    url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&redirects=yes&titles=" + subjURL
     html = urlopen(url).read()
     raw = nltk.clean_html(html)
     start = raw.lower().find(("'''" + subject.split(' ')[0]).lower())
