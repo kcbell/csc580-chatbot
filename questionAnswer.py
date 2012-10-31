@@ -12,8 +12,8 @@ from getSubjectInfo import getSubjectInfo
 # some pre-defined forms of subject queries
 subjectQueries = [
                   '.*about\s+(?:a\s+|the\s+)?(.+)',
-                  '.*what\s+(?:is|was)\s+(?:a\s+|the\s+)?(.+)',
-                  '.*who\s+(?:is|was)\s+(?:a\s+|the\s+)?(.+)',
+                  ".*what(?:\s+is|\s+was|'s)\s+(?:a\s+|the\s+)?(.+)",
+                  ".*who(?:\s+is|\s+was|'s)\s+(?:a\s+|the\s+)?(.+)",
                   '.*subject\s+of\s+(?:a\s+|the\s+)?(.+)',
                   ]
 
