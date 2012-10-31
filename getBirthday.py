@@ -12,7 +12,7 @@ from urllib import urlopen
 def getBirthday(name): #name = <firstName><space><lastName> or <name>
     months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     title = name.replace(" ","_") #convert to firstName_lastName
-    url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&titles=" + name
+    url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&action=query&redirects=yes&titles=" + name
     html = urlopen(url).read()
     idx = html.lower().find("birth date")
     if idx > -1:
