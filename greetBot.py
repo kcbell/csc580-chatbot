@@ -43,8 +43,8 @@ responseFun = zen.zen_chatbot.respond
 class TestBot(SingleServerIRCBot):
     state = 0
     mTimer = ""
-    states={0:{"_GREETED":1,"_INQUIRED":2,"_OUTREACH":4},
-            1:{"_GREETED":3,"_INQUIRED":2},
+    states={0:{"_GREETED":1,"_INQUIRED":2,"_OUTREACH":4,"_REPLIED":0},
+            1:{"_GREETED":3,"_INQUIRED":2,"_REPLIED":0},
             2:{"_GREETED":13,"_INQUIRED":2,"_INQUIRY":11},
             3:{"_GREETED":3,"_INQUIRED":2,"_REPLIED":3},
             4:{"_GREETED":5,"_INQUIRED":6,"_REPLIED":4,"_FRUSTRATED":7},
@@ -155,7 +155,7 @@ class TestBot(SingleServerIRCBot):
             else:
                 self.reset()                
             return
-        elif re.search("good(.|!)?|ok(.|!)?|fine(.|!)?|all[^\w]right", msg.lower()):
+        elif re.search("^good(.|!)?|^ok(.|!)?|^fine(.|!)?|^all[^\w]right", msg.lower()):
             self.nextState("_REPLIED")
             if len(self.responses[self.state]) > 0:
                 c.privmsg(self.channel,nick + ": " + self.responses[self.state])
@@ -198,14 +198,9 @@ class TestBot(SingleServerIRCBot):
         except ValueError:
             idx = -1
         if idx < 0:
-            try:
-                idx = users.index("toshi_")
-            except ValueError:
-                idx = -1
-        if idx < 0:
             while True:
                 idx = random.randint(0,len(users)-1)
-                if users[idx] != c.nick:
+                if users[idx] != c.get_nickname():
                     break
                 
         nick = users[idx]
