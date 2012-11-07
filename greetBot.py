@@ -253,7 +253,10 @@ def main():
             sys.exit(1)
     else:
         port = 6667
-    channel = '#' + sys.argv[2]
+        
+    if sys.argv[2].find("#") < 0:
+        channel = '#' + sys.argv[2]
+        
     nickname = sys.argv[3]
 
     bot = TestBot(channel, nickname, server, port)
