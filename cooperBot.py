@@ -101,7 +101,8 @@ class TestBot(SingleServerIRCBot):
             if topic != None:
                 facts = getFacts(subj, topic[0])
                 if (facts != None and len(facts) > 0):
-                    facts.insert(0, topic[1])
+                    if topic[1] != None:
+                        facts.insert(0, topic[1])
                     topic = topic[0]
                     break
         # I have something to talk about!
