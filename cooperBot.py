@@ -94,6 +94,7 @@ class TestBot(SingleServerIRCBot):
         subjs = getSubjects(cmd)
         subjs.reverse() # start from end of message
         facts = None
+        firstFact = None
         print "Got subjects: " + str(subjs)
         for subj in subjs:
             topic = getRelatedTopic(subj) if tangent else subj
@@ -101,8 +102,7 @@ class TestBot(SingleServerIRCBot):
             if topic != None:
                 facts = getFacts(subj, topic[0])
                 if (facts != None and len(facts) > 0):
-                    if topic[1] != None:
-                        facts.insert(0, topic[1])
+                    firstFact = topic[1]
                     topic = topic[0]
                     break
         # I have something to talk about!
@@ -132,10 +132,13 @@ class TestBot(SingleServerIRCBot):
             return 
         self.mTimer.cancel()
         random.shuffle(facts)
-        for fact in facts:
-            if fact.find(topic) >= 0:
-                facts.remove(fact)
-                facts.insert(0, fact)
+        if firstFact != None:
+            facts.insert(0, firstFact)
+        else:
+            for fact in facts:
+                if fact.find(topic) >= 0:
+                    facts.remove(fact)
+                    facts.insert(0, fact)
         time.sleep(len(facts[0]) / CHARS_PER_SEC)
         c.privmsg(self.channel, nick + ": " + self.formatFirst(facts[0]))
         for i in xrange(1, min(len(facts), 10), 2): # don't say more than 5 things
