@@ -45,6 +45,8 @@ def getContentDict(raw):
     raw = raw.replace('&quot;', '"')
     raw = re.sub(r'(\s)*==+(.+?)==+(\s)*', '[\g<2>] ', raw)
     sections = re.findall(r'\[(.+?)\]', raw)
+    if (len(sections) == 0):
+        return None
     subjDict = {}
     index = 0
     tempRaw = raw
