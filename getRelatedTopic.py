@@ -36,7 +36,7 @@ def getRelatedTopic(name): #name = <firstName><space><lastName> or <name>
 
         if idx > -1: #if a topic (link) is found
             relatedSentence = getRelatedSentence(name, topic)
-            relatedSentence = relatedSentence.replace("&quot;", '"').replace("&amp;", '&')
+            relatedSentence = relatedSentence.replace("&quot;", '"').replace("&amp;", '&').replace('[play]','').replace('[Listen]', '')
             pageTitle = topic[0].replace(" ","_") #convert to firstName_lastName
             
             # call Jake's function here
