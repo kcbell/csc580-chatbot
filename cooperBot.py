@@ -72,7 +72,8 @@ class TestBot(SingleServerIRCBot):
 
     def on_welcome(self, c, e):
         c.join(self.channel)
-        self.mTimer = threading.Timer(20.0,self.outreach)
+        print "Connected as %s." % self.connection.get_nickname()
+        self.mTimer = threading.Timer(60.0,self.outreach)
         self.mTimer.start()
 
     def on_privmsg(self, c, e):
@@ -105,6 +106,26 @@ class TestBot(SingleServerIRCBot):
         print "Got facts: " + str(facts)
         if (facts == None or len(facts) == 0):
             print "Giving up"
+            if tangent:
+                resp = random.choice(["I don't care about that.",
+                                      "That's boring.",
+                                      "Why would you even want to talk about that?",
+                                      "Why should I care?",
+                                      "I couldn't care less.",
+                                      "I'm sure you would know. On second thought, you probably wouldn't even know that.",
+                                      None])# special one
+                time.sleep(8)
+                if resp == None:
+                    resp = random.choice(["Well, I find that topic quite interesting.",
+                                          "I would really like to know more about that.",
+                                          "Sounds like a great learning opportunity for me."])
+                    c.privmsg(self.channel,nick + ": " + resp)
+                    time.sleep(5)
+                    resp = random.choice(["That was sarcasm. Could you tell?",
+                                          "*Sigh* Sarcasm is hard to communicate over text, isn't it?"])
+                    c.privmsg(self.channel,nick + ": " + resp)
+                else:
+                    c.privmsg(self.channel,nick + ": " + resp)
             return 
         self.mTimer.cancel()
         random.shuffle(facts)
@@ -203,7 +224,8 @@ class TestBot(SingleServerIRCBot):
             else:
                 self.reset()
             return
-        else:                          
+        else:
+            print "Attempting talking about something.kcbe"
             self.interrupt(nick, msg, False)
             return
         time.sleep(5)

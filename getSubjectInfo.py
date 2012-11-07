@@ -55,13 +55,13 @@ def getContentDict(raw):
         if sections[index].strip().lower() in uselessInfo:
             index += 1
             continue
-    start = tempRaw.find(sections[index])
-    end = tempRaw.find(sections[index+1])
-    str = tempRaw[start+len(sections[index])+1:end-1]
-    if str != ' ':
-        subjDict[sections[index].strip()] = tempRaw[start+len(sections[index])+1:end-1].strip()
-    index += 1
-    tempRaw = tempRaw[end:]
+        start = tempRaw.find(sections[index])
+        end = tempRaw.find(sections[index+1])
+        s = tempRaw[start+len(sections[index])+1:end-1]
+        if s != ' ':
+            subjDict[sections[index].strip()] = tempRaw[start+len(sections[index])+1:end-1].strip()
+        index += 1
+        tempRaw = tempRaw[end:]
     if sections[index].strip().lower() not in uselessInfo:
         subjDict[sections[index].strip()] = tempRaw[tempRaw.find(sections[index])+len(sections[index])+1:].strip()    
     return subjDict
