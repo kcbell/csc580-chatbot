@@ -14,6 +14,8 @@ npGrammar = r"""
       NP: {(<NP>|<NPS>|<NN>|<NNS>)+} 
     """
     
+# some things that trigger him
+good = ['Star Wars', 'Star Trek', 'physics', 'science', 'relativity']
 # some things that sometimes get caught which shouldn't
 bad = ['Have', 'Who', 'He', '', 'Him', 'You', 'She' 'I', 'Her', 'Them', 'They', 'Your', 'My', 'Me', 'Oh', 'We', 'Us']
 # some things that get caught ALONG WITH good things
@@ -61,6 +63,10 @@ def getSubjects(msg):
                 subject = cleanSubject(' '.join([w for (w,t) in chunk if w not in trim]))
                 if (subject not in bad):
                     subjects.append(subject)
+    # look for key words
+    for subj in good:
+        if msg.find(subj) >= 0:
+            subjects.append(subj)
     return subjects
     
 def main():
