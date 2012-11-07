@@ -33,11 +33,8 @@ def getRelatedTopic(name): #name = <firstName><space><lastName> or <name>
                 links.remove(topic)      #if no link, remove the toic (link)
 
         if idx > -1: #if a topic (link) is found
-            pageTitle = topic.replace(" ","_") #convert to firstName_lastName
             print "found good topic: " + topic
-            # call Jake's function here
-            result = getSubjectInfo.getFacts(name, pageTitle)         #get some fuct from the linked page
-            #result = (name, pageTitle)
+            return topic
             
     return result
 

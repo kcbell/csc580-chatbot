@@ -111,14 +111,20 @@ class TestBot(SingleServerIRCBot):
         facts = None
         print "Got subjects: " + str(subjs)
         for subj in subjs:
-            facts = getRelatedTopic(subj)
+            topic = getRelatedTopic(subj)
+            facts = getFacts(subj, topic)
             if (facts != None and len(facts) > 0):
                 break
         # I have something to talk about!
         print "Got facts: " + str(facts)
         if (facts == None or len(facts) == 0):
             return 
+        self.mTimer.cancel()
         random.shuffle(facts)
+        for fact in facts:
+            if topic in fact:
+                facts.remove(fact)
+                facts.insert(0, fact)
         c.privmsg(self.channel, nick + ": " + self.formatFirst(facts[0]))
         for i in xrange(1, min(len(facts), 10), 2): # don't say more than 5 things
             time.sleep(5)
@@ -130,6 +136,7 @@ class TestBot(SingleServerIRCBot):
                               "Well, it's lost on you anyway."])
         time.sleep(3)
         c.privmsg(self.channel,nick + ": " + resp)
+        self.reset()
             
     def formatFirst(self, msg):
         resp = random.choice(["Did you know that %s?",
@@ -224,7 +231,7 @@ class TestBot(SingleServerIRCBot):
 
             c.privmsg(self.channel,nick + ": " + responseFun(msg))
             return
-        
+        time.sleep(5)
     
     def nextState(self, inp):
         print inp
