@@ -36,13 +36,15 @@ from irclib import nm_to_n, nm_to_h, irc_lower, ip_numstr_to_quad, ip_quad_to_nu
 import nltk, re, getBirthday, threading, time, random
 from nltk.chat import eliza,zen
 
+import questionAnswer
+
 from getSubject import getSubjects, punct
 from getRelatedTopic import getRelatedTopic
 from getSubjectInfo import getFacts
 
 # this is a standin function for all responses that can easily be changed from here
 #responseFun = eliza.eliza_chatbot.respond
-responseFun = zen.zen_chatbot.respond
+responseFun = questionAnswer.getResponse
 
 class TestBot(SingleServerIRCBot):
     state = 0
@@ -112,9 +114,10 @@ class TestBot(SingleServerIRCBot):
         print "Got subjects: " + str(subjs)
         for subj in subjs:
             topic = getRelatedTopic(subj)
-            facts = getFacts(subj, topic)
-            if (facts != None and len(facts) > 0):
-                break
+            if topic != None:
+               facts = getFacts(subj, topic)
+               if (facts != None and len(facts) > 0):
+                   break
         # I have something to talk about!
         print "Got facts: " + str(facts)
         if (facts == None or len(facts) == 0):
@@ -122,7 +125,7 @@ class TestBot(SingleServerIRCBot):
         self.mTimer.cancel()
         random.shuffle(facts)
         for fact in facts:
-            if topic in fact:
+            if fact.find(topic) >= 0:
                 facts.remove(fact)
                 facts.insert(0, fact)
         c.privmsg(self.channel, nick + ": " + self.formatFirst(facts[0]))

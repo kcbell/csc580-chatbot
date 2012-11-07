@@ -45,7 +45,7 @@ def getLinks(name, maxLink):
     
     title = name.replace(" ","_") #convert to firstName_lastName
     url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&rvsection=0&action=query&redirects=yes&titles=" + title
-    print "using url " + url
+    #print "using url " + url
     html = urlopen(url).read()
     if len(html) > 0: #if the page is found
         str = html
