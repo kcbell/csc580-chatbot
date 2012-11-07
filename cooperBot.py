@@ -46,6 +46,8 @@ from getSubjectInfo import getFacts
 #responseFun = eliza.eliza_chatbot.respond
 responseFun = questionAnswer.getResponse
 
+CHARS_PER_SEC = 25
+
 class TestBot(SingleServerIRCBot):
     state = 0
     mTimer = ""
@@ -84,7 +86,7 @@ class TestBot(SingleServerIRCBot):
         a = e.arguments()[0].split(":", 1)
         if len(a) > 1 and irc_lower(a[0]) == irc_lower(self.connection.get_nickname()):
             self.do_command(e, a[1].strip())
-        else:
+        elif len(a) > 1:
             print "Attempting interrupt"
             self.interrupt(e, a[1].strip())
         return
@@ -121,6 +123,7 @@ class TestBot(SingleServerIRCBot):
         # I have something to talk about!
         print "Got facts: " + str(facts)
         if (facts == None or len(facts) == 0):
+            print "Giving up"
             return 
         self.mTimer.cancel()
         random.shuffle(facts)
@@ -128,16 +131,17 @@ class TestBot(SingleServerIRCBot):
             if fact.find(topic) >= 0:
                 facts.remove(fact)
                 facts.insert(0, fact)
+        time.sleep(len(facts[0]) / CHARS_PER_SEC)
         c.privmsg(self.channel, nick + ": " + self.formatFirst(facts[0]))
         for i in xrange(1, min(len(facts), 10), 2): # don't say more than 5 things
-            time.sleep(5)
+            time.sleep(len(facts[i]) / CHARS_PER_SEC)
             c.privmsg(self.channel,nick + ": " + facts[i])
         resp = random.choice(["You're not even listening, are you?",
                               "I can tell you don't care.",
                               "Oh, you don't understand anyway.",
                               "Are you even listening to me?",
                               "Well, it's lost on you anyway."])
-        time.sleep(3)
+        time.sleep(8)
         c.privmsg(self.channel,nick + ": " + resp)
         self.reset()
             

@@ -37,7 +37,7 @@ def getFirstTwoLines(raw):
         raw = raw[:index]
     except IndexError:
         pass
-    ret = "I don't know about that." if len(raw) <= 1 else raw[0].upper() + raw[1:]
+    ret = "I don't care about that." if len(raw) <= 1 else raw[0].upper() + raw[1:]
     return "Which one?" if ret.endswith(" to:") else ret
 
 def getContentDict(raw):
@@ -65,7 +65,7 @@ def getRandomFacts(subject, subjDict):
 	sentences = nltk.sent_tokenize(subjDict[k])
 	for s in sentences:
             for subjToken in subjSplit:
-		if subjToken in s:
+		if subjToken in s and (s.endswith('.') or s.endswith('!')):
 		    factList.append(s.replace('&amp;', '&'))
 		    break
     return factList

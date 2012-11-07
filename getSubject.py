@@ -14,7 +14,7 @@ npGrammar = r"""
       NP: {(<NP>|<NPS>|<NN>|<NNS>)+} 
     """
     
-bad = ['Have', 'Who', 'He', '', 'Him', 'You', 'She' 'I', 'Her', 'Them', 'They', 'Your', 'My', 'We', 'Us']
+bad = ['Have', 'Who', 'He', '', 'Him', 'You', 'She' 'I', 'Her', 'Them', 'They', 'Your', 'My', 'Me', 'Oh', 'We', 'Us']
 
 trim = ['Is', 'is', 'Hi', 'hi', 'Hello', 'hello']
 
