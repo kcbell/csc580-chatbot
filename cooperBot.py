@@ -97,11 +97,12 @@ class TestBot(SingleServerIRCBot):
         print "Got subjects: " + str(subjs)
         for subj in subjs:
             topic = getRelatedTopic(subj) if tangent else subj
-            print "Got topic: "
+            print "Got topic: " + str(topic)
             if topic != None:
                 facts = getFacts(subj, topic[0])
                 if (facts != None and len(facts) > 0):
                     facts.insert(0, topic[1])
+                    topic = topic[0]
                     break
         # I have something to talk about!
         print "Got facts: " + str(facts)
