@@ -41,7 +41,7 @@ def getRelatedTopic(name): #name = <firstName><space><lastName> or <name>
             # call Jake's function here
             #result = getSubjectInfo.getFacts(name, pageTitle)         #get some fuct from the linked page
 
-            result = (topic[0], relatedSentence if relatedSentence[-1] in ['.','!'] else None)
+            result = (topic[0], relatedSentence if len(relatedSentence) > 0 and relatedSentence[-1] in ['.','!'] else None)
             
     return result
 
