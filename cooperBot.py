@@ -88,6 +88,30 @@ class TestBot(SingleServerIRCBot):
             self.interrupt(nm_to_n(e.source()), a[1].strip())
         return
 
+    def giveup(self, nick, tangent):
+        c = self.connection
+        if tangent:
+                resp = random.choice(["I don't care about that.",
+                                      "That's boring.",
+                                      "Why would you even want to talk about that?",
+                                      "Why should I care?",
+                                      "I couldn't care less.",
+                                      "I'm sure you would know. On second thought, you probably wouldn't even know that.",
+                                      None])# special one
+                time.sleep(8)
+                if resp == None:
+                    resp = random.choice(["Well, I find that topic quite interesting.",
+                                          "I would really like to know more about that.",
+                                          "Sounds like a great learning opportunity for me."])
+                    c.privmsg(self.channel,nick + ": " + resp)
+                    time.sleep(5)
+                    resp = random.choice(["That was sarcasm. Could you tell?",
+                                          "*Sigh* Sarcasm is hard to communicate over text, isn't it?"])
+                    c.privmsg(self.channel,nick + ": " + resp)
+                else:
+                    c.privmsg(self.channel,nick + ": " + resp)
+        return
+
     # deals with other people's conversations
     def interrupt(self, nick, cmd, tangent = True):
         c = self.connection
@@ -109,36 +133,23 @@ class TestBot(SingleServerIRCBot):
         print "Got facts: " + str(facts)
         if (facts == None or len(facts) == 0):
             print "Giving up"
-            if tangent:
-                resp = random.choice(["I don't care about that.",
-                                      "That's boring.",
-                                      "Why would you even want to talk about that?",
-                                      "Why should I care?",
-                                      "I couldn't care less.",
-                                      "I'm sure you would know. On second thought, you probably wouldn't even know that.",
-                                      None])# special one
-                time.sleep(8)
-                if resp == None:
-                    resp = random.choice(["Well, I find that topic quite interesting.",
-                                          "I would really like to know more about that.",
-                                          "Sounds like a great learning opportunity for me."])
-                    c.privmsg(self.channel,nick + ": " + resp)
-                    time.sleep(5)
-                    resp = random.choice(["That was sarcasm. Could you tell?",
-                                          "*Sigh* Sarcasm is hard to communicate over text, isn't it?"])
-                    c.privmsg(self.channel,nick + ": " + resp)
-                else:
-                    c.privmsg(self.channel,nick + ": " + resp)
-            return 
+            self.giveup(nick, tangent)
+            return
         self.mTimer.cancel()
         random.shuffle(facts)
         if firstFact != None:
             facts.insert(0, firstFact)
         else:
+            found = False
             for fact in facts:
                 if fact.find(topic) >= 0:
                     facts.remove(fact)
                     facts.insert(0, fact)
+                    found = True
+            # just don't
+            if not found:
+                self.giveup(nick, tangent)
+                return
         time.sleep(len(facts[0]) / CHARS_PER_SEC)
         c.privmsg(self.channel, nick + ": " + self.formatFirst(facts[0]))
         for i in xrange(1, min(len(facts), 10), 2): # don't say more than 5 things
