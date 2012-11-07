@@ -21,6 +21,7 @@ def getRelatedTopic(name): #name = <firstName><space><lastName> or <name>
         #check to see if the linked page refers back to this page
         while len(links) != 0 and idx == -1:
             topic = random.choice(links)  #randomly picks a topic(link)
+            print "checking related topic " + topic 
             rLinks = getLinks(topic,100) #get links from the linked page
             #print rLinks
             for l in rLinks:
@@ -33,7 +34,7 @@ def getRelatedTopic(name): #name = <firstName><space><lastName> or <name>
 
         if idx > -1: #if a topic (link) is found
             pageTitle = topic.replace(" ","_") #convert to firstName_lastName
-            
+            print "found good topic: " + topic
             # call Jake's function here
             result = getSubjectInfo.getFacts(name, pageTitle)         #get some fuct from the linked page
             #result = (name, pageTitle)
@@ -47,6 +48,7 @@ def getLinks(name, maxLink):
     
     title = name.replace(" ","_") #convert to firstName_lastName
     url = "http://en.wikipedia.org/w/api.php?format=xml&prop=revisions&rvprop=content&rvsection=0&action=query&redirects=yes&titles=" + title
+    print "using url " + url
     html = urlopen(url).read()
     if len(html) > 0: #if the page is found
         str = html
@@ -63,7 +65,8 @@ def getLinks(name, maxLink):
             idx = link.find("|")  #look for text for display purpose only
             if idx > 0:
                 link = link[:idx] #remove the text
-            links.append(link.replace("&amp;#039;","'")) #append the link to the list
+            if not link.startswith("File:"):
+                links.append(link.replace("&amp;#039;","'")) #append the link to the list
         idx1 = str.find(startTag) #find next start tag
         count += 1                #increment the count
         

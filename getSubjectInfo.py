@@ -66,7 +66,7 @@ def getRandomFacts(subject, subjDict):
 	for s in sentences:
             for subjToken in subjSplit:
 		if subjToken in s:
-		    factList.append(s)
+		    factList.append(s.replace('&amp;', '&'))
 		    break
     return factList
 

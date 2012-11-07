@@ -13,6 +13,10 @@ punct = '!"#$%&*+,-./:;<=>?@[\]^_`{|}~' + "'"
 npGrammar = r"""
       NP: {(<NP>|<NPS>|<NN>|<NNS>)+} 
     """
+    
+bad = ['Have']
+
+trim = ['Is', 'is', 'Hi', 'hi', 'Hello', 'hello']
 
 def getPOSTagger():
     # lazy init
@@ -53,8 +57,9 @@ def getSubjects(msg):
     for chunks in chunkses:
         for chunk in chunks:
             if hasattr(chunk, 'node') and chunk.node == 'NP':
-                subject = ' '.join([w for (w,t) in chunk])
-                subjects.append(cleanSubject(subject))
+                subject = cleanSubject(' '.join([w for (w,t) in chunk if w not in trim]))
+                if (subject not in bad):
+                    subjects.append(subject)
     return subjects
     
 def main():
