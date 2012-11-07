@@ -7,7 +7,6 @@ The two lines are taken from Wikipedia.
 import re, nltk
 
 from urllib import urlopen
-from nltk.corpus import conll2000
 
 def checkForUppercaseLetter(s):
     if s[0] != ' ':
@@ -41,56 +40,48 @@ def getFirstTwoLines(raw):
     return "Which one?" if ret.endswith(" to:") else ret
 
 def getContentDict(raw):
+    if 'may refer to:' in raw[:raw.find(':')+1] or len(raw) < 1:
+        return None
     raw = raw.replace('&quot;', '"')
     raw = re.sub(r'(\s)*==+(.+?)==+(\s)*', '[\g<2>] ', raw)
     sections = re.findall(r'\[(.+?)\]', raw)
     subjDict = {}
     index = 0
     tempRaw = raw
+    uselessInfo = ['bibliography', 'primary sources', 'further reading and resources', 'external links', 'notes', 'see also', 'further reading', 'references', 'publications']
+
+    subjDict['Introduction'] = tempRaw[:tempRaw.find(sections[index])-1]
     while index < len(sections) - 1:
-	start = tempRaw.find(sections[index])
-	end = tempRaw.find(sections[index+1])
-	str = tempRaw[start+len(sections[index])+1:end-1]
-	if str != ' ':
-		subjDict[sections[index].strip()] = tempRaw[start+len(sections[index])+1:end-1].strip()
-	index += 1
-	tempRaw = tempRaw[end:]
-    subjDict[sections[index].strip()] = tempRaw[tempRaw.find(sections[index])+len(sections[index])+1:].strip()    
+        if sections[index].strip().lower() in uselessInfo:
+            index += 1
+            continue
+    start = tempRaw.find(sections[index])
+    end = tempRaw.find(sections[index+1])
+    str = tempRaw[start+len(sections[index])+1:end-1]
+    if str != ' ':
+        subjDict[sections[index].strip()] = tempRaw[start+len(sections[index])+1:end-1].strip()
+    index += 1
+    tempRaw = tempRaw[end:]
+    if sections[index].strip().lower() not in uselessInfo:
+        subjDict[sections[index].strip()] = tempRaw[tempRaw.find(sections[index])+len(sections[index])+1:].strip()    
     return subjDict
 
 def getRandomFacts(subject, subjDict):
     factList = []
     subjSplit = subject.split(' ')
     for k in subjDict.keys():
-	sentences = nltk.sent_tokenize(subjDict[k])
-	for s in sentences:
+        sentences = nltk.sent_tokenize(subjDict[k])
+        for s in sentences:
             for subjToken in subjSplit:
-		if subjToken in s and (s.endswith('.') or s.endswith('!')):
-		    factList.append(s.replace('&amp;', '&'))
-		    break
+                if subjToken in s and s[-1] in ['.', '!']:
+                    factList.append(s.replace('&amp;', '&'))
+                    break
     return factList
-
-#This function is being used by getRandomFactsCHUNKING
-def preprocess(content):
-    sentences = nltk.sent_tokenize(content)
-    sentences = [nltk.word_tokenize(sent) for sent in sentences]
-    return [nltk.pos_tag(sent) for sent in sentences]
-
-#This function is not done yet
-def getRandomFactsCHUNKING(subject, subjDict):
-    if 'Early life' in subjDict.keys():
-	grammar = r"NP: {<[CDJNP].*>+}"
-	cp = nltk.RegexpParser(grammar)
-	posTaggedSents = preprocess(subjDict['Early life'])
-	for sent in posTaggedSents:
-		chunkedSent = cp.parse(sent)
-		print chunkedSent
-	return []
-    else:
-    	return []
 
 def getFacts(origSubj, newSubj):
     content = getContentDict(getSubjectInfo(newSubj))
+    if content == None:
+        return []
     facts = getRandomFacts(origSubj, content)
     return facts
 
@@ -100,7 +91,7 @@ def main():
     facts = getFacts(msg, msg)
 
     for f in facts:
-	print f
+    print f
     
 if __name__ == "__main__":
     main()

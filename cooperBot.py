@@ -42,10 +42,6 @@ from getSubject import getSubjects, punct
 from getRelatedTopic import getRelatedTopic
 from getSubjectInfo import getFacts
 
-# this is a standin function for all responses that can easily be changed from here
-#responseFun = eliza.eliza_chatbot.respond
-responseFun = questionAnswer.getResponse
-
 CHARS_PER_SEC = 25
 
 class TestBot(SingleServerIRCBot):
@@ -88,38 +84,22 @@ class TestBot(SingleServerIRCBot):
             self.do_command(e, a[1].strip())
         elif len(a) > 1:
             print "Attempting interrupt"
-            self.interrupt(e, a[1].strip())
+            self.interrupt(nm_to_n(e.source()), a[1].strip())
         return
 
-#We don't care about DCC messaging
-#    def on_dccmsg(self, c, e):
-#        c.privmsg("You said: " + e.arguments()[0])
-#
-#    def on_dccchat(self, c, e):
-#        if len(e.arguments()) != 2:
-#            return
-#        args = e.arguments()[1].split()
-#        if len(args) == 4:
-#            try:
-#                address = ip_numstr_to_quad(args[2])
-#                port = int(args[3])
-#            except ValueError:
-#                return
-#            self.dcc_connect(address, port)
-
     # deals with other people's conversations
-    def interrupt(self, e, cmd):
-        nick = nm_to_n(e.source())
+    def interrupt(self, nick, cmd, tangent = True):
         c = self.connection
         subjs = getSubjects(cmd)
+        subjs.reverse() # start from end of message
         facts = None
         print "Got subjects: " + str(subjs)
         for subj in subjs:
-            topic = getRelatedTopic(subj)
+            topic = getRelatedTopic(subj) if tangent else subj
             if topic != None:
-               facts = getFacts(subj, topic)
-               if (facts != None and len(facts) > 0):
-                   break
+                facts = getFacts(subj, topic)
+                if (facts != None and len(facts) > 0):
+                    break
         # I have something to talk about!
         print "Got facts: " + str(facts)
         if (facts == None or len(facts) == 0):
@@ -151,7 +131,7 @@ class TestBot(SingleServerIRCBot):
                               "Interesting fact: %s.",
                               "Something you probably don't know is that %s.",
                               "You might be interested to know %s."])
-        return resp % msg[:-1] # TODO: Make better at removing punct
+        return resp % msg[:-1]
 
     #processes commands
     def do_command(self, e, cmd):
@@ -222,21 +202,8 @@ class TestBot(SingleServerIRCBot):
             else:
                 self.reset()
             return
-        else:
-            m = re.search("(\w+)[^\w](\w+)[^\w](born\??)", msg)
-            if m:
-                name = m.group(1) + " " + m.group(2)
-                c.privmsg(self.channel,nick + ": " + getBirthday.getBirthday(name))
-                return
-            
-            m = re.search("(\w+)[^\w](\w+)[^\w][s][^\w](birthday\??)", msg)
-            if m:
-                name = m.group(1) + " " + m.group(2)
-                c.privmsg(self.channel,nick + ": " + getBirthday.getBirthday(name))
-                return
-                          
-
-            c.privmsg(self.channel,nick + ": " + responseFun(msg))
+        else:                          
+            self.interrupt(nick, msg, False)
             return
         time.sleep(5)
     
