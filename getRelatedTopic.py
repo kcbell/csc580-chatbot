@@ -117,10 +117,7 @@ def getRelatedSentence(name, topic):
         elif len(topic[1]) == 0 and sent.find(topic[0]) > -1:
             target = sent
             break
-        
-    if len(target) > 0:
-        print target
-    
+            
     return target
         
             

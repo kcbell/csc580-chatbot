@@ -152,6 +152,7 @@ class TestBot(SingleServerIRCBot):
                 print "Giving up"
                 self.giveup(nick, tangent)
                 return
+        print "Talking about " + topic
         time.sleep(len(facts[0]) / CHARS_PER_SEC)
         c.privmsg(self.channel, nick + ": " + self.formatFirst(facts[0]))
         for i in xrange(1, min(len(facts), 10), 2): # don't say more than 5 things
