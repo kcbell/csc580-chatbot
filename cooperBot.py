@@ -149,6 +149,7 @@ class TestBot(SingleServerIRCBot):
                     break
             # just don't
             if not found:
+                print "Giving up"
                 self.giveup(nick, tangent)
                 return
         time.sleep(len(facts[0]) / CHARS_PER_SEC)
