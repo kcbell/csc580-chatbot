@@ -14,8 +14,9 @@ npGrammar = r"""
       NP: {(<NP>|<NPS>|<NN>|<NNS>)+} 
     """
     
+# some things that sometimes get caught which shouldn't
 bad = ['Have', 'Who', 'He', '', 'Him', 'You', 'She' 'I', 'Her', 'Them', 'They', 'Your', 'My', 'Me', 'Oh', 'We', 'Us']
-
+# some things that get caught ALONG WITH good things
 trim = ['Is', 'is', 'Hi', 'hi', 'Hello', 'hello']
 
 def getPOSTagger():

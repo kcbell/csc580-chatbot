@@ -97,8 +97,9 @@ class TestBot(SingleServerIRCBot):
         for subj in subjs:
             topic = getRelatedTopic(subj) if tangent else subj
             if topic != None:
-                facts = getFacts(subj, topic)
+                facts = getFacts(subj, topic[0])
                 if (facts != None and len(facts) > 0):
+                    facts.insert(0, topic[1])
                     break
         # I have something to talk about!
         print "Got facts: " + str(facts)
