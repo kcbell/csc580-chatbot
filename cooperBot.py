@@ -146,6 +146,7 @@ class TestBot(SingleServerIRCBot):
                     facts.remove(fact)
                     facts.insert(0, fact)
                     found = True
+                    break
             # just don't
             if not found:
                 self.giveup(nick, tangent)
