@@ -97,6 +97,7 @@ class TestBot(SingleServerIRCBot):
         print "Got subjects: " + str(subjs)
         for subj in subjs:
             topic = getRelatedTopic(subj) if tangent else subj
+            print "Got topic: "
             if topic != None:
                 facts = getFacts(subj, topic[0])
                 if (facts != None and len(facts) > 0):

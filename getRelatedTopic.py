@@ -40,7 +40,7 @@ def getRelatedTopic(name): #name = <firstName><space><lastName> or <name>
             
             # call Jake's function here
             #result = getSubjectInfo.getFacts(name, pageTitle)         #get some fuct from the linked page
-            print "found good topic: " + topic[0]
+
             result = (topic[0], relatedSentence)
             
     return result
