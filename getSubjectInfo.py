@@ -89,9 +89,8 @@ def main():
     msg = raw_input()
     #resp = getFirstTwoLines(getSubjectInfo(msg))
     facts = getFacts(msg, msg)
-
     for f in facts:
-    print f
+        print f
     
 if __name__ == "__main__":
     main()
