@@ -17,7 +17,7 @@ npGrammar = r"""
 # some things that trigger him
 good = ['Star Wars', 'Star Trek', 'physics', 'science', 'relativity']
 # some things that sometimes get caught which shouldn't
-bad = ['Have', 'Who', 'He', '', 'Him', 'You', 'She' 'I', 'Her', 'Them', 'They', 'Your', 'My', 'Me', 'Oh', 'We', 'Us', 'Weird', 'What', 'It', 'Now', 'Talkin Here', 'Shutup']
+bad = ['Bazinga', 'Have', 'Who', 'He', '', 'Him', 'You', 'She' 'I', 'Her', 'Them', 'They', 'Your', 'My', 'Me', 'Oh', 'We', 'Us', 'Weird', 'What', 'It', 'Now', 'Talkin Here', 'Shutup']
 # some things that get caught ALONG WITH good things
 trim = ['Is', 'is', 'Hi', 'hi', 'Hello', 'hello']
 
