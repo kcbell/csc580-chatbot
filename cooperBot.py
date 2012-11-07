@@ -57,9 +57,9 @@ class TestBot(SingleServerIRCBot):
             7:{"_GREETED":5,"_INQUIRED":6,"_REPLIED":7,"_FRUSTRATED":9},
             8:{"_GREETED":8,"_INQUIRED":8,"_REPLIED":10,"_FRUSTRATED":9},
             9:{"_GREETED":5,"_INQUIRED":12,"_REPLIED":10,"_DONE":13},
-            10:{"_DONE":13},
+            10:{"_DONE":13, "_REPLIED":10},
             11:{"_GREETED":8,"_INQUIRED":12,"_REPLIED":10,"_FRUSTRATED":8},
-            12:{"_DONE":13},
+            12:{"_DONE":13, "_REPLIED":10},
             13:{"_GREETED":13,"_INQUIRED":13,"_REPLIED":13,"_FRUSTRATED":13}}
     responses=["","Hello!","I am Fine!","","Hi, there!","How are you?","I am good.","I said, Hi..","I said, How are you?..","Forget you!","That's good to hear... Good. Now the social niceties are out of the way.","How are you?","Pretty good.",""]
 
@@ -245,7 +245,7 @@ class TestBot(SingleServerIRCBot):
                 self.reset()
             return
         else:
-            print "Attempting talking about something.kcbe"
+            print "Attempting talking about something."
             self.interrupt(nick, msg, False)
             return
         time.sleep(5)
