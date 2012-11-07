@@ -90,7 +90,7 @@ class TestBot(SingleServerIRCBot):
 
     def giveup(self, nick, tangent):
         c = self.connection
-        if tangent:
+        if not tangent:
                 resp = random.choice(["I don't care about that.",
                                       "That's boring.",
                                       "Why would you even want to talk about that?",
