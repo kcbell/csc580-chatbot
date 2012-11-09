@@ -1,3 +1,7 @@
 csc580-chatbot
 ==============
-See included PDF.
+cooperBot.py is the final chatbot implementation.
+
+A raw phase II bot is available in greetBot.py
+
+See included PDF for more information.
